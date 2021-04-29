@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>bikelanes-map</title>
+        <link rel="stylesheet" href="src/leaflet.css">
+        <link rel="stylesheet" href="src/css/bootstrap.css">
+        <script src="src/leaflet.js"></script>
+        <script src="src/jquery-3.2.0.min.js"></script>
+        <script src="src/plugins/leaflet.ajax.min.js"></script>
+
+    </head>
+        <style>
+            body {margin:0; padding:0;}
+            #mapdiv {position: absolute; top:0; bottom:0; right:0; left:0;}
+            #map-title { position: relative; margin-top: 10px; margin-left: 50px; float: left; 
+                         background: white; border: 2px solid rgba(0,0,0,0.2); padding: 6px 8px; 
+                         font-family: Helvetica; font-weight: bold; font-size: 24px; z-index: 800; }
+        </style>
+    <body>
+        <div id="map-title" >DPWH-DOTr bike lanes</div>
+        <!-- <div id="side-bar" class="col-md-3"></div> -->
+        <div id="mapdiv"></div>
+        <script>
+            var mymap; 
+            var lyrOSM;
+            var bikeLanesNCR;
+            
+            var objOverlays;
+            
+            $(document).ready(function(){
+                mymap = L.map('mapdiv', {center:[14.609, 121.022], zoom:13})
+                         
+                lyrOSM = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                            attribution: '&copy; <a href="https://osm.org/copyright">\
+                                OpenStreetMap</a> contributors, &copy;\
+                                <a href="https://carto.com/attribution">CARTO</a>'
+                        }).addTo(mymap);
+
+                bikeLanesNCR = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson').addTo(mymap);
+            
+            });
+            
+        </script>
+    </body>
+</html>
