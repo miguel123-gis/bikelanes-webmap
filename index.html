@@ -41,9 +41,7 @@
             
             $(document).ready(function(){         
                 mymap = L.map('mapdiv', {center:[14.609, 121.022], zoom:11, zoomControl:false});
-// MEASURE FUNCTION
                 ctlMeasure = L.control.polylineMeasure().addTo(mymap);
-// BASEMAPS
                 lyrCarto = L.tileLayer.provider('CartoDB.Positron', 
                                                 {attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors, &copy;<a href="https://carto.com/attribution">CARTO</a>',
                                                  subdomains: 'abcd',
@@ -60,11 +58,9 @@
                                                  ext: 'png'});
                 lyrImagery = L.tileLayer.provider('Esri.WorldImagery',
                                                   {attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'});
-// VECTOR LAYERS
                 lyrBikeLanesNCR_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle}).addTo(mymap);
                 lyrBikeLanesSNCR_2021 = L.geoJSON.ajax('data/2021_bikelanes_south_ncr.geojson', {style:sncrStyle}).addTo(mymap);
                 lyrBikeLanesQC = L.geoJSON.ajax('data/qc_bikelanes_ncr.geojson', {style:qcblStyle}).addTo(mymap);               
-// LAYER CONTROL
                 objBasemaps = {
                     "Carto Positron": lyrCarto,
                     "OpenStreetMap": lyrOSM,
@@ -80,7 +76,6 @@
 
                 ctlLayers = L.control.layers(objBasemaps, objOverlays).addTo(mymap);
 
-// Indivdual layer styling
                 function ba2ncrStyle(geojson) {
                     return{
                         color: 'black',
