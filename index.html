@@ -13,7 +13,6 @@
         <script src="src/plugins/leaflet.ajax.min.js"></script>
         <script src="src/leaflet-providers.js"></script>
         <script src="src/plugins/Leaflet.PolylineMeasure.js"></script>
-
     </head>
         <style>
             body {margin:0; padding:0;}
@@ -28,6 +27,7 @@
         <div id="mapdiv"></div>
         <script>
             var mymap;
+            var mrkCurrentLocation;
             var lyrCarto; 
             var lyrOSM;
             var lyrToner;
@@ -41,8 +41,38 @@
             var objOverlays;
             
             $(document).ready(function(){
+// INITIALIZE MAP          
                 mymap = L.map('mapdiv', {center:[14.609, 121.022], zoom:11, zoomControl:false});
-                ctlMeasure = L.control.polylineMeasure().addTo(mymap); 
+// LOCATE FUNCTION
+// Copy sidebar style, check if title can be put in sidebar
+                mymap.on('click', function(e){
+                    if (e.originalEvent.shiftKey) {
+                        alert(mymap.getZoom());
+                    } else {
+                        alert(e.latlng.toString());
+                    }
+                });
+                mymap.on('keypress', function(e) {
+                    if (e.originalEvent.key=="l") {
+                        mymap.locate();
+                    }
+                });
+                mymap.on('locationfound', function(e) {
+                    console.log(e);
+                    if (mrkCurrentLocation) {
+                        mrkCurrentLocation.remove();
+                    }
+                    mrkCurrentLocation = L.circle(e.latlng, {radius:e.accuracy/2}).addTo(mymap);
+                    mymap.setView(e.latlng, 14);
+                });
+                
+                mymap.on('locationerror', function(e) {
+                    console.log(e);
+                    alert("Location was not found");
+                })
+// MEASURE FUNCTION
+                ctlMeasure = L.control.polylineMeasure().addTo(mymap);
+// BASEMAPS
                 lyrCarto = L.tileLayer.provider('CartoDB.Positron', 
                                                 {attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors, &copy;<a href="https://carto.com/attribution">CARTO</a>',
                                                  subdomains: 'abcd',
@@ -59,12 +89,11 @@
                                                  ext: 'png'});
                 lyrImagery = L.tileLayer.provider('Esri.WorldImagery',
                                                   {attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'});
-
+// VECTOR LAYERS
                 lyrBikeLanesNCR_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle}).addTo(mymap);
                 lyrBikeLanesSNCR_2021 = L.geoJSON.ajax('data/2021_bikelanes_south_ncr.geojson', {style:sncrStyle}).addTo(mymap);
-                lyrBikeLanesQC = L.geoJSON.ajax('data/qc_bikelanes_ncr.geojson', {style:qcblStyle}).addTo(mymap);
-                
-// Layer control
+                lyrBikeLanesQC = L.geoJSON.ajax('data/qc_bikelanes_ncr.geojson', {style:qcblStyle}).addTo(mymap);               
+// LAYER CONTROL
                 objBasemaps = {
                     "Carto Positron": lyrCarto,
                     "OpenStreetMap": lyrOSM,
