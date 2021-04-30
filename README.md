@@ -1,2 +1,2 @@
 ## Link to live map
-https://miguel123-gis.github.io/bikelanes-map/index.html
+https://miguel123-gis.github.io/bikelanes-map/
