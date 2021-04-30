@@ -30,15 +30,15 @@
             var lyrOSM;
             var lyrToner;
             var lyrImagery
-            var bikeLanesNCR_ba2;
-            var bikeLanesSNCR_2021;
-            var bikeLanesQC;
+            var lyrBikeLanesNCR_ba2;
+            var lyrBikeLanesSNCR_2021;
+            var lyrBikeLanesQC;
             var ctlLayers;
             var objBasemaps;
             var objOverlays;
             
             $(document).ready(function(){
-                mymap = L.map('mapdiv', {center:[14.609, 121.022], zoom:13})
+                mymap = L.map('mapdiv', {center:[14.609, 121.022], zoom:11})
                          
                 lyrCarto = L.tileLayer.provider('CartoDB.Positron', 
                                                 {attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors, &copy;<a href="https://carto.com/attribution">CARTO</a>',
@@ -57,9 +57,9 @@
                 lyrImagery = L.tileLayer.provider('Esri.WorldImagery',
                                                   {attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'});
 
-                bikeLanesNCR_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson').addTo(mymap);
-                bikeLanesSNCR_2021 = L.geoJSON.ajax('data/2021_bikelanes_south_ncr.geojson').addTo(mymap);
-                bikeLanesQC = L.geoJSON.ajax('data/qc_bikelanes_ncr.geojson').addTo(mymap);
+                lyrBikeLanesNCR_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle}).addTo(mymap);
+                lyrBikeLanesSNCR_2021 = L.geoJSON.ajax('data/2021_bikelanes_south_ncr.geojson', {style:sncrStyle}).addTo(mymap);
+                lyrBikeLanesQC = L.geoJSON.ajax('data/qc_bikelanes_ncr.geojson', {style:qcblStyle}).addTo(mymap);
                 
 
                 objBasemaps = {
@@ -70,12 +70,28 @@
                 }
 
                 objOverlays = {
-                    "BA2 NCR": bikeLanesNCR_ba2,
-                    "2021 South NCR": bikeLanesSNCR_2021,
-                    "QC LGU": bikeLanesQC
+                    "BA2 NCR": lyrBikeLanesNCR_ba2,
+                    "2021 South NCR": lyrBikeLanesSNCR_2021,
+                    "QC LGU": lyrBikeLanesQC
                 }
 
                 ctlLayers = L.control.layers(objBasemaps, objOverlays).addTo(mymap);
+
+                function ba2ncrStyle(geojson) {
+                    return{
+                        color: 'black',
+                    }};
+
+                function sncrStyle(geojson) {
+                    return{
+                        color: 'blue'
+                    }};
+
+                function qcblStyle(geojson) {
+                    return{
+                        color: 'green',
+                        dashArray: '5, 5'
+                    }};
             
             });
             
