@@ -10,6 +10,7 @@
         <script src="src/leaflet.js"></script>
         <script src="src/jquery-3.2.0.min.js"></script>
         <script src="src/plugins/leaflet.ajax.min.js"></script>
+        <script src="src/leaflet-providers.js"></script>
 
     </head>
         <style>
@@ -20,26 +21,57 @@
                          font-family: Helvetica; font-weight: bold; font-size: 24px; z-index: 800; }
         </style>
     <body>
-        <div id="map-title" >DPWH-DOTr bike lanes</div>
+        <div id="map-title" >Bayanihan II bike lanes</div>
         <!-- <div id="side-bar" class="col-md-3"></div> -->
         <div id="mapdiv"></div>
         <script>
-            var mymap; 
+            var mymap;
+            var lyrCarto; 
             var lyrOSM;
-            var bikeLanesNCR;
-            
+            var lyrToner;
+            var bikeLanesNCR_ba2;
+            var bikeLanesSNCR_2021;
+            var bikeLanesQC;
+            var ctlLayers;
+            var objBasemaps;
             var objOverlays;
             
             $(document).ready(function(){
                 mymap = L.map('mapdiv', {center:[14.609, 121.022], zoom:13})
                          
-                lyrOSM = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                            attribution: '&copy; <a href="https://osm.org/copyright">\
-                                OpenStreetMap</a> contributors, &copy;\
-                                <a href="https://carto.com/attribution">CARTO</a>'
-                        }).addTo(mymap);
+                lyrCarto = L.tileLayer.provider('CartoDB.Positron', 
+                                                {attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors, &copy;<a href="https://carto.com/attribution">CARTO</a>',
+                                                 subdomains: 'abcd',
+	                                             maxZoom: 19});
+                lyrCarto.addTo(mymap);
+                lyrOSM = L.tileLayer.provider('OpenStreetMap.Mapnik', 
+                                                {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                                                 maxZoom: 19,});
+                lyrToner = L.tileLayer.provider('Stamen.TonerLite', 
+                                                {attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	                                             subdomains: 'abcd',
+                                                 minZoom: 0,
+                                                 maxZoom: 20,
+                                                 ext: 'png'});
 
-                bikeLanesNCR = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson').addTo(mymap);
+                bikeLanesNCR_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson').addTo(mymap);
+                bikeLanesSNCR_2021 = L.geoJSON.ajax('data/2021_bikelanes_south_ncr.geojson').addTo(mymap);
+                bikeLanesQC = L.geoJSON.ajax('data/qc_bikelanes_ncr.geojson').addTo(mymap);
+                
+
+                objBasemaps = {
+                    "Carto Positron": lyrCarto,
+                    "OpenStreetMap": lyrOSM,
+                    "Stamen Toner Lite": lyrToner
+                }
+
+                objOverlays = {
+                    "BA2 NCR": bikeLanesNCR_ba2,
+                    "2021 South NCR": bikeLanesSNCR_2021,
+                    "QC LGU": bikeLanesQC
+                }
+
+                ctlLayers = L.control.layers(objBasemaps, objOverlays).addTo(mymap);
             
             });
             
