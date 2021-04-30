@@ -27,7 +27,6 @@
         <div id="mapdiv"></div>
         <script>
             var mymap;
-            var mrkCurrentLocation;
             var lyrCarto; 
             var lyrOSM;
             var lyrToner;
@@ -40,36 +39,8 @@
             var objBasemaps;
             var objOverlays;
             
-            $(document).ready(function(){
-// INITIALIZE MAP          
+            $(document).ready(function(){         
                 mymap = L.map('mapdiv', {center:[14.609, 121.022], zoom:11, zoomControl:false});
-// LOCATE FUNCTION
-// Copy sidebar style, check if title can be put in sidebar
-                mymap.on('click', function(e){
-                    if (e.originalEvent.shiftKey) {
-                        alert(mymap.getZoom());
-                    } else {
-                        alert(e.latlng.toString());
-                    }
-                });
-                mymap.on('keypress', function(e) {
-                    if (e.originalEvent.key=="l") {
-                        mymap.locate();
-                    }
-                });
-                mymap.on('locationfound', function(e) {
-                    console.log(e);
-                    if (mrkCurrentLocation) {
-                        mrkCurrentLocation.remove();
-                    }
-                    mrkCurrentLocation = L.circle(e.latlng, {radius:e.accuracy/2}).addTo(mymap);
-                    mymap.setView(e.latlng, 14);
-                });
-                
-                mymap.on('locationerror', function(e) {
-                    console.log(e);
-                    alert("Location was not found");
-                })
 // MEASURE FUNCTION
                 ctlMeasure = L.control.polylineMeasure().addTo(mymap);
 // BASEMAPS
