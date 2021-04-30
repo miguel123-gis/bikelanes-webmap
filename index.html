@@ -38,8 +38,9 @@
             var ctlMeasure;
             var objBasemaps;
             var objOverlays;
-// test
-            $(document).ready(function(){         
+
+            $(document).ready(function(){    
+// MAP INITIALIZATION     
                 mymap = L.map('mapdiv', {center:[14.609, 121.022], zoom:11, zoomControl:false});
                 ctlMeasure = L.control.polylineMeasure().addTo(mymap);
                 lyrCarto = L.tileLayer.provider('CartoDB.Positron', 
