@@ -16,7 +16,7 @@
         <script src="src/leaflet-providers.js"></script>
         <script src="src/plugins/Leaflet.PolylineMeasure.js"></script>
         <script src="src/plugins/easy-button.js"></script>
-        <link rel="stylesheet" href="src/plugins/L.Control.Sidebar.js">
+        <script src="src/plugins/L.Control.Sidebar.js"></script>
     </head>
 <!-- TITLE STYLING -->
         <style>
@@ -34,9 +34,16 @@
             <button id='btnMManila' class='btn btn-primary btn-block'>Zoom to Metro Manila</button>
             <button id='btnMCebu' class='btn btn-primary btn-block'>Zoom to Metro Cebu</button>
             <button id='btnMDavao' class='btn btn-primary btn-block'>Zoom to Metro Davao</button>
-            <h4>Mouse location: <span id='mouse-location'></span></h4>
+            <h4>Mouse location: <span id='mouse-location'></span></h4></br>
+            <h3>For more information about the DOTr-DPWH Bayanihan II bike lanes, visit these links:</h3>
+            <ul>
+                <h4>1. <a href="https://www.facebook.com/DOTrPH/posts/1998895966916196">Active Transport Infographics</a></h4>
+                <h4>2. <a href="https://www.smsupermalls.com/smcares/press-releases/bike-friendly-sm/">DOTr-SM Biker's Manual</a></h4>
+                <h4>3. <a href="https://www.google.com/maps/d/u/2/edit?mid=1MUEnacNSB60OpJQG0ViAnzJ6ECrA5z7p&ll=14.589372084560416%2C121.03263774951976&z=13">Mapping of bike lanes</a></h4>
+            </ul></br></br>
+            <h5><i><a href="https://github.com/miguel123-gis/bikelanes-map">GitHub repository</a></i></h5>
         </div>
-        <div id="mapdiv" class="col-md-9"></div>
+        <div id="mapdiv" class="col-md-12"></div>
         <script>
             var mymap;
             var lyrCarto; 
@@ -52,7 +59,7 @@
             var lyrUsblBikeLanes            // MAPPED USABLE BIKE LANES
             var ctlLayers;
             var ctlMeasure;
-            var ctlSidebar
+            var ctlSidebar;
             var ctlEasybutton;
             var objBasemaps;
             var objOverlays;
@@ -60,6 +67,7 @@
             $(document).ready(function(){    
 // MAP INITIALIZATION     
                 mymap = L.map('mapdiv', {center:[14.560, 121.027], zoom:11});
+                
 // POP-UP W/ COORDINATES AND DATE
                 mymap.on('contextmenu', function(e) {
                     var dtCurrentTime = new Date();
@@ -109,6 +117,10 @@
                 
 // MEASURE FUNCTION
                 ctlMeasure = L.control.polylineMeasure().addTo(mymap);
+                ctlSidebar = L.control.sidebar('side-bar').addTo(mymap);
+                ctlEasybutton = L.easyButton('glyphicon-transfer', function(){
+                   ctlSidebar.toggle(); 
+                }).addTo(mymap);
 // BASEMAPS
                 lyrCarto = L.tileLayer.provider('CartoDB.Positron', 
                                                 {attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors, &copy;<a href="https://carto.com/attribution">CARTO</a>',
