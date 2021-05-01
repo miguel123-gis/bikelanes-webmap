@@ -46,17 +46,18 @@
             <div id="legend">
                 <h5 class="text-left"><b>Bike lanes</b></h5>
                 <svg height:"270" width="100%">
+                    <!-- USABLE -->
                     <line x1="10" y1="10" x2="40" y2="10" style="stroke:yellow; stroke-width:5";/>
                     <text x="50" y="15" style="font-family: sans-serif; font-size:14px">Usable</text>
-
+                    <!-- MODERATELY USABLE -->
                     <line x1="10" y1="40" x2="40" y2="40" style="stroke:yellow; stroke-width:5; stroke-dasharray:5,5"/>
                     <text x="50" y="45" style="font-family: sans-serif; font-size:14px">Moderately usable</text>
-
+                    <!-- BAYANIHAN II -->
                     <line x1="10" y1="70" x2="40" y2="70" style="stroke:black; stroke-width:5;"/>
                     <text x="50" y="75" style="font-family: sans-serif; font-size:14px">Bayanihan II</text>
-
+                    <!-- QUEZON CITY LGU -->
                     <line x1="10" y1="100" x2="40" y2="100" style="stroke:green; stroke-width:5;"/>
-                    <text x="50" y="105" style="font-family: sans-serif; font-size:14px">Quezon City</text>
+                    <text x="50" y="105" style="font-family: sans-serif; font-size:14px">Quezon City LGU</text>
                 </svg>
             </div>
             <h6>Routing and other features coming soon! :D | <a href="https://github.com/miguel123-gis/bikelanes-map">GitHub repository</a></h6>
@@ -84,8 +85,7 @@
 
             $(document).ready(function(){    
 // MAP INITIALIZATION     
-                mymap = L.map('mapdiv', {center:[14.560, 121.027], zoom:11});
-                
+                mymap = L.map('mapdiv', {center:[14.560, 121.027], zoom:11});      
 // POP-UP W/ COORDINATES AND DATE
                 mymap.on('contextmenu', function(e) {
                     var dtCurrentTime = new Date();
@@ -96,7 +96,6 @@
                     console.log(ll);
                     return ""+ll.lat.toFixed(3)+", "+ll.lng.toFixed(3)+"";
                 }
-
 // LOCATE POSITION BUTTON
                 mymap.on('locationfound', function(e) {
                     console.log(e);
@@ -135,6 +134,7 @@
                 
 // MEASURE FUNCTION
                 ctlMeasure = L.control.polylineMeasure().addTo(mymap);
+// SIDEBAR TOGGLE BUTTON
                 ctlSidebar = L.control.sidebar('side-bar').addTo(mymap);
                 ctlEasybutton = L.easyButton('glyphicon-transfer', function(){
                    ctlSidebar.toggle(); 
@@ -157,7 +157,7 @@
                 lyrImagery = L.tileLayer.provider('Esri.WorldImagery',
                                                   {attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community|&copy;<a href="https://www.linkedin.com/in/miguel-imperial-8abaa31a0/">Miguel Imperial</a>'});
 // VECTOR LAYERS
-                lyrBikeLanesMManila_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle}).addTo(mymap);
+                lyrBikeLanesMManila_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle});
                 lyrBikeLanesMCebu_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_metrocebu.geojson', {style:ba2mcebuStyle}).addTo(mymap);
                 lyrBikeLanesMDavao_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_metrodavao.geojson', {style:ba2mdavaoStyle}).addTo(mymap);
                 lyrBikeLanesMManila_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle}).addTo(mymap);
@@ -180,7 +180,6 @@
                     "Bayanihan II Metro Davao": lyrBikeLanesMDavao_ba2,
                     "Quezon City LGU": lyrBikeLanesQC,
                     "2021 South NCR": lyrBikeLanesSNCR_2021
-                    
                 }
 
                 ctlLayers = L.control.layers(objBasemaps, objOverlays).addTo(mymap);
@@ -235,9 +234,7 @@
                                     weight: 0.85}
                     }
                 }
-
-            });
-            
+            });   
         </script>
     </body>
 </html>
