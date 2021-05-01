@@ -34,6 +34,7 @@
             var lyrBikeLanesNCR_ba2;
             var lyrBikeLanesSNCR_2021;
             var lyrBikeLanesQC;
+            var lyrUsblBikeLanes
             var ctlLayers;
             var ctlMeasure;
             var objBasemaps;
@@ -65,6 +66,7 @@
                 lyrBikeLanesNCR_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle}).addTo(mymap);
                 lyrBikeLanesSNCR_2021 = L.geoJSON.ajax('data/2021_bikelanes_south_ncr.geojson', {style:sncrStyle}).addTo(mymap);
                 lyrBikeLanesQC = L.geoJSON.ajax('data/qc_bikelanes_ncr.geojson', {style:qcblStyle}).addTo(mymap);          
+                lyrUsblBikeLanes = L.geoJSON.ajax('data/usable_bikelanes_30April2021.geojson', {style:usblStyle}).addTo(mymap);
 // LAYER CONTROL
 // // BASEMAPS     
                 objBasemaps = {
@@ -77,27 +79,48 @@
                 objOverlays = {
                     "BA2 NCR": lyrBikeLanesNCR_ba2,
                     "2021 South NCR": lyrBikeLanesSNCR_2021,
-                    "QC LGU": lyrBikeLanesQC
+                    "QC LGU": lyrBikeLanesQC,
+                    "Usable bike lanes as of 30 April": lyrUsblBikeLanes
                 }
 
                 ctlLayers = L.control.layers(objBasemaps, objOverlays).addTo(mymap);
 // LAYER STYLING
-                function ba2ncrStyle(geojson) {
-                    return{
+                function ba2ncrStyle(json) {
+                    return {
                         color: 'black',
+                        weight: 6   
                     }};
 
-                function sncrStyle(geojson) {
-                    return{
-                        color: 'blue'
+                function sncrStyle(json) {
+                    return {
+                        color: 'blue',
+                        weight: 5
                     }};
 
-                function qcblStyle(geojson) {
-                    return{
+                function qcblStyle(json) {
+                    return {
                         color: 'green',
-                        dashArray: '5, 5'
+                        weight: 4   
                     }};
+
             
+                function usblStyle (json) {
+                    var att = json.properties;
+                    switch (att.Name) {
+                        case 'Usable':
+                            return {color: 'yellow'}
+                            break;
+                        case 'Moderately Usable':
+                            return {color: 'yellow', 
+                                    dashArray: "5,5"};
+                            break;
+                        default:
+                            return {color: 'orange', 
+                                    dashArray: "4,4", 
+                                    weight: 0.85}
+                    }
+                }
+
             });
             
         </script>
