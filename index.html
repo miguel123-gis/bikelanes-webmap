@@ -8,41 +8,105 @@
         <link rel="stylesheet" href="src/leaflet.css">
         <link rel="stylesheet" href="src/css/bootstrap.css">
         <link rel="stylesheet" href="src/plugins/Leaflet.PolylineMeasure.css">
+        <link rel="stylesheet" href="src/plugins/easy-button.css">
+        <link rel="stylesheet" href="src/plugins/L.Control.Sidebar.css">
         <script src="src/leaflet.js"></script>
         <script src="src/jquery-3.2.0.min.js"></script>
         <script src="src/plugins/leaflet.ajax.min.js"></script>
         <script src="src/leaflet-providers.js"></script>
         <script src="src/plugins/Leaflet.PolylineMeasure.js"></script>
+        <script src="src/plugins/easy-button.js"></script>
+        <link rel="stylesheet" href="src/plugins/L.Control.Sidebar.js">
     </head>
+<!-- TITLE STYLING -->
         <style>
-            body {margin:0; padding:0;}
-            #mapdiv {position: absolute; top:0; bottom:0; right:0; left:0;}
-            #map-title { position: relative; margin-top: 10px; margin-left: 50px; float: left; 
-                         background: white; border: 2px solid rgba(0,0,0,0.2); padding: 6px 8px; 
-                         font-family: Helvetica; font-weight: bold; font-size: 24px; z-index: 800; }
+            /* body {margin:0; padding:0;} */
+            #mapdiv {height:100vh}
+            #map-title {position: relative; margin-top: 5px; margin-bottom: 5px; margin-left: relative;  
+                         float: center; background: whitesmoke; border: 2px solid rgba(0,0,0,0.2); padding: 5px 5px; 
+                         font-family: Helvetica; font-weight: bold; font-size: 24px; z-index: 800;};
         </style>
+<!-- SIDEBAR CONTENT -->
     <body>
-        <div id="map-title" >Bayanihan II bike lanes</div>
-        <!-- <div id="side-bar" class="col-md-3"></div> -->
-        <div id="mapdiv"></div>
+        <div id="side-bar" class="col-md-3">
+            <div id="map-title" >Bayanihan II bike lanes</div>
+            <button id='btnLocate' class='btn btn-primary btn-block'>Zoom to your location</button>
+            <button id='btnMManila' class='btn btn-primary btn-block'>Zoom to Metro Manila</button>
+            <button id='btnMCebu' class='btn btn-primary btn-block'>Zoom to Metro Cebu</button>
+            <button id='btnMDavao' class='btn btn-primary btn-block'>Zoom to Metro Davao</button>
+            <h4>Mouse location: <span id='mouse-location'></span></h4>
+        </div>
+        <div id="mapdiv" class="col-md-9"></div>
         <script>
             var mymap;
             var lyrCarto; 
             var lyrOSM;
+            var mrkCurrentLocation
             var lyrToner;
             var lyrImagery
-            var lyrBikeLanesNCR_ba2;
-            var lyrBikeLanesSNCR_2021;
-            var lyrBikeLanesQC;
-            var lyrUsblBikeLanes
+            var lyrBikeLanesMManila_ba2;    // BAYANIHAN II METRO MANILA
+            var lyrBikeLanesMCebu_ba2;      // BAYANIHAN II METRO CEBU
+            var lyrBikeLanesMDavao_ba2;     // BAYANIHAN II METRO DAVAO
+            var lyrBikeLanesSNCR_2021;      // 2021 SOUTH NCR EXPANSION
+            var lyrBikeLanesQC;             // QUEZON CITY LGU
+            var lyrUsblBikeLanes            // MAPPED USABLE BIKE LANES
             var ctlLayers;
             var ctlMeasure;
+            var ctlSidebar
+            var ctlEasybutton;
             var objBasemaps;
             var objOverlays;
 
             $(document).ready(function(){    
 // MAP INITIALIZATION     
-                mymap = L.map('mapdiv', {center:[14.609, 121.022], zoom:11, zoomControl:false});
+                mymap = L.map('mapdiv', {center:[14.560, 121.027], zoom:11});
+// POP-UP W/ COORDINATES AND DATE
+                mymap.on('contextmenu', function(e) {
+                    var dtCurrentTime = new Date();
+                    L.marker(e.latlng).addTo(mymap).bindPopup(e.latlng.toString()+"<br>"+dtCurrentTime.toString());
+                });
+
+                function LatLngToArrayString(ll) {
+                    console.log(ll);
+                    return ""+ll.lat.toFixed(3)+", "+ll.lng.toFixed(3)+"";
+                }
+
+// LOCATE POSITION BUTTON
+                mymap.on('locationfound', function(e) {
+                    console.log(e);
+                    if (mrkCurrentLocation) {
+                        mrkCurrentLocation.remove();
+                    }
+                    mrkCurrentLocation = L.circle(e.latlng, {radius:e.accuracy/0.5}).addTo(mymap);
+                    mymap.setView(e.latlng, 16);
+                });
+                
+                mymap.on('locationerror', function(e) {
+                    console.log(e);
+                    alert("Location was not found");
+                })
+                
+                $("#btnLocate").click(function(){
+                    mymap.locate();
+                });
+// ZOOM TO AREA
+                $("#btnMManila").click(function(){
+                    mymap.setView([14.560, 121.027], 11);
+                })
+
+                $("#btnMCebu").click(function(){
+                    mymap.setView([10.298, 123.925], 12);
+                })
+
+                $("#btnMDavao").click(function(){
+                    mymap.setView([7.052, 125.560], 13);
+                })
+
+// LIVE COORDINATES ON SIDEBAR
+                mymap.on('mousemove', function(e){
+                    $("#mouse-location").html(LatLngToArrayString(e.latlng));
+                });
+                
 // MEASURE FUNCTION
                 ctlMeasure = L.control.polylineMeasure().addTo(mymap);
 // BASEMAPS
@@ -63,7 +127,10 @@
                 lyrImagery = L.tileLayer.provider('Esri.WorldImagery',
                                                   {attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'});
 // VECTOR LAYERS
-                lyrBikeLanesNCR_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle}).addTo(mymap);
+                lyrBikeLanesMManila_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle}).addTo(mymap);
+                lyrBikeLanesMCebu_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_metrocebu.geojson', {style:ba2mcebuStyle}).addTo(mymap);
+                lyrBikeLanesMDavao_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_metrodavao.geojson', {style:ba2mdavaoStyle}).addTo(mymap);
+                lyrBikeLanesMManila_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle}).addTo(mymap);
                 lyrBikeLanesSNCR_2021 = L.geoJSON.ajax('data/2021_bikelanes_south_ncr.geojson', {style:sncrStyle}).addTo(mymap);
                 lyrBikeLanesQC = L.geoJSON.ajax('data/qc_bikelanes_ncr.geojson', {style:qcblStyle}).addTo(mymap);          
                 lyrUsblBikeLanes = L.geoJSON.ajax('data/usable_bikelanes_30April2021.geojson', {style:usblStyle}).addTo(mymap);
@@ -77,24 +144,43 @@
                 }
 // // VECTOR LAYERS
                 objOverlays = {
-                    "BA2 NCR": lyrBikeLanesNCR_ba2,
-                    "2021 South NCR": lyrBikeLanesSNCR_2021,
-                    "QC LGU": lyrBikeLanesQC,
-                    "Usable bike lanes as of 30 April": lyrUsblBikeLanes
+                    "Usable bike lanes as of 30 April": lyrUsblBikeLanes,
+                    "Bayanihan II NCR": lyrBikeLanesMManila_ba2,
+                    "Bayanihan II Metro Cebu": lyrBikeLanesMCebu_ba2,
+                    "Bayanihan II Metro Davao": lyrBikeLanesMDavao_ba2,
+                    "Quezon City LGU": lyrBikeLanesQC,
+                    "2021 South NCR": lyrBikeLanesSNCR_2021
+                    
                 }
 
                 ctlLayers = L.control.layers(objBasemaps, objOverlays).addTo(mymap);
 // LAYER STYLING
                 function ba2ncrStyle(json) {
-                    return {
-                        color: 'black',
-                        weight: 6   
-                    }};
+                    var att = json.properties;
+                    switch (att.type) {
+                        case 'Circumferential':
+                            return {color: 'black', weight: 5.5};
+                            break;
+                        case 'Radial':
+                            return {color: 'black', weight: 4.5};
+                            break;
+                        default: 
+                            return {color: 'black', weight: 4};
+                    } 
+                }
+
+                function ba2mcebuStyle(json) {
+                    return {color:'black', weight: 4}
+                }
+
+                function ba2mdavaoStyle(json) {
+                    return {color:'black', weight: 4}
+                }
 
                 function sncrStyle(json) {
                     return {
                         color: 'blue',
-                        weight: 5
+                        weight: 4
                     }};
 
                 function qcblStyle(json) {
@@ -103,7 +189,6 @@
                         weight: 4   
                     }};
 
-            
                 function usblStyle (json) {
                     var att = json.properties;
                     switch (att.Name) {
