@@ -20,11 +20,10 @@
     </head>
 <!-- TITLE STYLING -->
         <style>
-            /* body {margin:0; padding:0;} */
             #mapdiv {height:100vh}
             #map-title {position: relative; margin-top: 5px; margin-bottom: 5px; margin-left: relative;  
                          float: center; background: whitesmoke; border: 2px solid rgba(0,0,0,0.2); padding: 5px 5px; 
-                         font-family: Helvetica; font-weight: bold; font-size: 24px; z-index: 800;};
+                         font-family: Helvetica; font-weight: bold; font-size: 24px; z-index: 800;};;
         </style>
 <!-- SIDEBAR CONTENT -->
     <body>
@@ -47,16 +46,16 @@
                 <h5 class="text-left"><b>Bike lanes</b></h5>
                 <svg height:"270" width="100%">
                     <!-- USABLE -->
-                    <line x1="10" y1="10" x2="40" y2="10" style="stroke:yellow; stroke-width:5";/>
+                    <line x1="0" y1="10" x2="40" y2="10" style="stroke:yellow; stroke-width:5";/>
                     <text x="50" y="15" style="font-family: sans-serif; font-size:14px">Usable as of 30 April 2021</text>
                     <!-- MODERATELY USABLE -->
-                    <line x1="10" y1="40" x2="40" y2="40" style="stroke:yellow; stroke-width:5; stroke-dasharray:5,5"/>
+                    <line x1="0" y1="40" x2="40" y2="40" style="stroke:yellow; stroke-width:5; stroke-dasharray:5,5"/>
                     <text x="50" y="45" style="font-family: sans-serif; font-size:14px">Moderately usable</text>
                     <!-- BAYANIHAN II -->
-                    <line x1="10" y1="70" x2="40" y2="70" style="stroke:black; stroke-width:5;"/>
+                    <line x1="0" y1="70" x2="40" y2="70" style="stroke:black; stroke-width:5;"/>
                     <text x="50" y="75" style="font-family: sans-serif; font-size:14px">Bayanihan II</text>
                     <!-- QUEZON CITY LGU -->
-                    <line x1="10" y1="100" x2="40" y2="100" style="stroke:green; stroke-width:5;"/>
+                    <line x1="0" y1="100" x2="40" y2="100" style="stroke:green; stroke-width:5;"/>
                     <text x="50" y="105" style="font-family: sans-serif; font-size:14px">Quezon City LGU</text>
                 </svg>
             </div>
@@ -82,21 +81,21 @@
             var ctlEasybutton;
             var objBasemaps;
             var objOverlays;
-
+/* INITIALIZE MAP */
             $(document).ready(function(){    
-// MAP INITIALIZATION     
+    
                 mymap = L.map('mapdiv', {center:[14.606, 121.026], zoom:11});      
-// POP-UP W/ COORDINATES AND DATE
-                mymap.on('contextmenu', function(e) {
-                    var dtCurrentTime = new Date();
-                    L.marker(e.latlng).addTo(mymap).bindPopup(e.latlng.toString()+"<br>"+dtCurrentTime.toString());
-                });
+// /* POP-UP W/ COORDINATES AND DATE */
+//                 mymap.on('contextmenu', function(e) {
+//                     var dtCurrentTime = new Date();
+//                     L.marker(e.latlng).addTo(mymap).bindPopup(e.latlng.toString()+"<br>"+dtCurrentTime.toString());
+//                 });
 
                 function LatLngToArrayString(ll) {
                     console.log(ll);
                     return ""+ll.lat.toFixed(3)+", "+ll.lng.toFixed(3)+"";
                 }
-// LOCATE POSITION BUTTON
+/* LOCATE POSITION BUTTON */
                 mymap.on('locationfound', function(e) {
                     console.log(e);
                     if (mrkCurrentLocation) {
@@ -114,7 +113,7 @@
                 $("#btnLocate").click(function(){
                     mymap.locate();
                 });
-// ZOOM TO AREA
+/* ZOOM TO AREA */
                 $("#btnMManila").click(function(){
                     mymap.setView([14.560, 121.027], 11);
                 })
@@ -126,20 +125,18 @@
                 $("#btnMDavao").click(function(){
                     mymap.setView([7.052, 125.560], 13);
                 })
-
-// LIVE COORDINATES ON SIDEBAR
+/* LIVE COORDINATES ON SIDEBAR */
                 mymap.on('mousemove', function(e){
                     $("#mouse-location").html(LatLngToArrayString(e.latlng));
                 });
-                
-// MEASURE FUNCTION
+/* MEASURE FUNCTION */
                 ctlMeasure = L.control.polylineMeasure().addTo(mymap);
-// SIDEBAR TOGGLE BUTTON
+/* SIDEBAR TOGGLE BUTTON */
                 ctlSidebar = L.control.sidebar('side-bar').addTo(mymap);
                 ctlEasybutton = L.easyButton('glyphicon-transfer', function(){
                    ctlSidebar.toggle(); 
                 }).addTo(mymap);
-// BASEMAPS
+/* BASEMAPS */
                 lyrCarto = L.tileLayer.provider('CartoDB.Positron', 
                                                 {attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors|&copy;<a href="https://www.linkedin.com/in/miguel-imperial-8abaa31a0/">Miguel Imperial</a>',
                                                  subdomains: 'abcd',
@@ -156,7 +153,7 @@
                                                  ext: 'png'});
                 lyrImagery = L.tileLayer.provider('Esri.WorldImagery',
                                                   {attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community|&copy;<a href="https://www.linkedin.com/in/miguel-imperial-8abaa31a0/">Miguel Imperial</a>'});
-// VECTOR LAYERS
+/* VECTOR LAYERS */
                 lyrBikeLanesMManila_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle});
                 lyrBikeLanesMCebu_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_metrocebu.geojson', {style:ba2mcebuStyle}).addTo(mymap);
                 lyrBikeLanesMDavao_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_metrodavao.geojson', {style:ba2mdavaoStyle}).addTo(mymap);
@@ -164,15 +161,15 @@
                 // lyrBikeLanesSNCR_2021 = L.geoJSON.ajax('data/2021_bikelanes_south_ncr.geojson', {style:sncrStyle}).addTo(mymap);
                 lyrBikeLanesQC = L.geoJSON.ajax('data/qc_bikelanes_ncr.geojson', {style:qcblStyle}).addTo(mymap);          
                 lyrUsblBikeLanes = L.geoJSON.ajax('data/usable_bikelanes_30April2021.geojson', {style:usblStyle}).addTo(mymap);
-// LAYER CONTROL
-// // BASEMAPS     
+/* LAYER CONTROL */
+/* BASEMAPS      */
                 objBasemaps = {
                     "Carto Positron": lyrCarto,
                     "OpenStreetMap": lyrOSM,
                     "Stamen Toner Lite": lyrToner,
                     "ESRI Imagery": lyrImagery
                 }
-// // VECTOR LAYERS
+/* VECTOR LAYERS */
                 objOverlays = {
                     "Mapped bike lanes": lyrUsblBikeLanes,
                     "Bayanihan II NCR": lyrBikeLanesMManila_ba2,
@@ -183,7 +180,7 @@
                 }
 
                 ctlLayers = L.control.layers(objBasemaps, objOverlays).addTo(mymap);
-// LAYER STYLING
+/* LAYER STYLING */
                 function ba2ncrStyle(json) {
                     var att = json.properties;
                     switch (att.type) {
