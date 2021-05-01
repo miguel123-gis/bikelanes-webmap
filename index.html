@@ -83,14 +83,7 @@
             var objOverlays;
 /* INITIALIZE MAP */
             $(document).ready(function(){    
-    
                 mymap = L.map('mapdiv', {center:[14.606, 121.026], zoom:11});      
-// /* POP-UP W/ COORDINATES AND DATE */
-//                 mymap.on('contextmenu', function(e) {
-//                     var dtCurrentTime = new Date();
-//                     L.marker(e.latlng).addTo(mymap).bindPopup(e.latlng.toString()+"<br>"+dtCurrentTime.toString());
-//                 });
-
                 function LatLngToArrayString(ll) {
                     console.log(ll);
                     return ""+ll.lat.toFixed(3)+", "+ll.lng.toFixed(3)+"";
