@@ -161,7 +161,7 @@
                 lyrBikeLanesMCebu_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_metrocebu.geojson', {style:ba2mcebuStyle}).addTo(mymap);
                 lyrBikeLanesMDavao_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_metrodavao.geojson', {style:ba2mdavaoStyle}).addTo(mymap);
                 lyrBikeLanesMManila_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle}).addTo(mymap);
-                lyrBikeLanesSNCR_2021 = L.geoJSON.ajax('data/2021_bikelanes_south_ncr.geojson', {style:sncrStyle}).addTo(mymap);
+                // lyrBikeLanesSNCR_2021 = L.geoJSON.ajax('data/2021_bikelanes_south_ncr.geojson', {style:sncrStyle}).addTo(mymap);
                 lyrBikeLanesQC = L.geoJSON.ajax('data/qc_bikelanes_ncr.geojson', {style:qcblStyle}).addTo(mymap);          
                 lyrUsblBikeLanes = L.geoJSON.ajax('data/usable_bikelanes_30April2021.geojson', {style:usblStyle}).addTo(mymap);
 // LAYER CONTROL
@@ -179,7 +179,7 @@
                     "Bayanihan II Metro Cebu": lyrBikeLanesMCebu_ba2,
                     "Bayanihan II Metro Davao": lyrBikeLanesMDavao_ba2,
                     "Quezon City LGU": lyrBikeLanesQC,
-                    "2021 South NCR": lyrBikeLanesSNCR_2021
+                    // "2021 South NCR": lyrBikeLanesSNCR_2021
                 }
 
                 ctlLayers = L.control.layers(objBasemaps, objOverlays).addTo(mymap);
