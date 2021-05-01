@@ -34,15 +34,32 @@
             <button id='btnMManila' class='btn btn-primary btn-block'>Zoom to Metro Manila</button>
             <button id='btnMCebu' class='btn btn-primary btn-block'>Zoom to Metro Cebu</button>
             <button id='btnMDavao' class='btn btn-primary btn-block'>Zoom to Metro Davao</button>
-            <h4>Mouse location: <span id='mouse-location'></span></h4>
-            <h5>Yellow lines: usable, broken yellow: moderately usable, broken orange: almost unusable</h5>
-            <h4>For more information about the DOTr-DPWH Bayanihan II bike lanes, visit these links:</h4>
+            <h6>Mouse location: <span id='mouse-location'></span></h6>
+            <h5><b>Resource links</b> on the DOTr-DPWH Bayanihan II bike lanes</h5>
             <ul>
-                <h4>1. <a href="https://www.facebook.com/DOTrPH/posts/1998895966916196">Active Transport Infographics</a></h4>
-                <h4>2. <a href="https://www.smsupermalls.com/smcares/press-releases/bike-friendly-sm/">DOTr-SM Biker's Manual</a></h4>
-                <h4>3. <a href="https://www.google.com/maps/d/u/2/edit?mid=1MUEnacNSB60OpJQG0ViAnzJ6ECrA5z7p&ll=14.589372084560416%2C121.03263774951976&z=13">Mapping of bike lanes</a></h4>
-            </ul></br></br>
-            <h5>Other features coming soon! :D | <i><a href="https://github.com/miguel123-gis/bikelanes-map">GitHub repository</a></i></h5>
+                <h5>1. <a href="https://www.facebook.com/DOTrPH/posts/1998895966916196">Active Transport Infographics</a></h5>
+                <h5>2. <a href="https://www.smsupermalls.com/smcares/press-releases/bike-friendly-sm/">DOTr-SM Biker's Manual</a></h5>
+                <h5>3. <a href="https://www.google.com/maps/d/u/2/edit?mid=1MUEnacNSB60OpJQG0ViAnzJ6ECrA5z7p&ll=14.589372084560416%2C121.03263774951976&z=13">Mapping of bike lanes</a>*</h5>
+            </ul>
+            <h6>*Source of the usable bike lanes layer</h6>
+<!-- LEGEND CONTENT -->
+            <div id="legend">
+                <h5 class="text-left"><b>Bike lanes</b></h5>
+                <svg height:"270" width="100%">
+                    <line x1="10" y1="10" x2="40" y2="10" style="stroke:yellow; stroke-width:5";/>
+                    <text x="50" y="15" style="font-family: sans-serif; font-size:14px">Usable</text>
+
+                    <line x1="10" y1="40" x2="40" y2="40" style="stroke:yellow; stroke-width:5; stroke-dasharray:5,5"/>
+                    <text x="50" y="45" style="font-family: sans-serif; font-size:14px">Moderately usable</text>
+
+                    <line x1="10" y1="70" x2="40" y2="70" style="stroke:black; stroke-width:5;"/>
+                    <text x="50" y="75" style="font-family: sans-serif; font-size:14px">Bayanihan II</text>
+
+                    <line x1="10" y1="100" x2="40" y2="100" style="stroke:green; stroke-width:5;"/>
+                    <text x="50" y="105" style="font-family: sans-serif; font-size:14px">Quezon City</text>
+                </svg>
+            </div>
+            <h6>Other features coming soon! :D | <a href="https://github.com/miguel123-gis/bikelanes-map">GitHub repository</a></h6>
         </div>
         <div id="mapdiv" class="col-md-12"></div>
         <script>
@@ -124,21 +141,21 @@
                 }).addTo(mymap);
 // BASEMAPS
                 lyrCarto = L.tileLayer.provider('CartoDB.Positron', 
-                                                {attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors, &copy;<a href="https://carto.com/attribution">CARTO</a>',
+                                                {attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors|&copy;<a href="https://github.com/miguel123-gis/bikelanes-map">Miguel Imperial</a>',
                                                  subdomains: 'abcd',
 	                                             maxZoom: 19});
                 lyrCarto.addTo(mymap);
                 lyrOSM = L.tileLayer.provider('OpenStreetMap.Mapnik', 
-                                                {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                                                {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors|&copy;<a href="https://github.com/miguel123-gis/bikelanes-map">Miguel Imperial</a>',
                                                  maxZoom: 19,});
                 lyrToner = L.tileLayer.provider('Stamen.TonerLite', 
-                                                {attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                                                {attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors|&copy;<a href="https://github.com/miguel123-gis/bikelanes-map">Miguel Imperial</a>',
 	                                             subdomains: 'abcd',
                                                  minZoom: 0,
                                                  maxZoom: 20,
                                                  ext: 'png'});
                 lyrImagery = L.tileLayer.provider('Esri.WorldImagery',
-                                                  {attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'});
+                                                  {attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community|&copy;<a href="https://github.com/miguel123-gis/bikelanes-map">Miguel Imperial</a>'});
 // VECTOR LAYERS
                 lyrBikeLanesMManila_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle}).addTo(mymap);
                 lyrBikeLanesMCebu_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_metrocebu.geojson', {style:ba2mcebuStyle}).addTo(mymap);
