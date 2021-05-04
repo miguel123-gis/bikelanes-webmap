@@ -17,6 +17,8 @@
         <script src="src/plugins/Leaflet.PolylineMeasure.js"></script>
         <script src="src/plugins/easy-button.js"></script>
         <script src="src/plugins/L.Control.Sidebar.js"></script>
+        <script src="src/plugins/Tooltip.js"></script>
+
     </head>
 <!-- TITLE STYLING -->
         <style>
@@ -77,6 +79,7 @@
             var lyrBikeLanesTaguig;         // TAGUIG CITY LGU
             var lyrBikelanesPasig;          // PASIG CITY LGU
             var lyrUsblBikeLanes;           // MAPPED USABLE BIKE LANES
+            var lyrBorders;                 // ADMINISTRATIVE BORDERS
             var ctlLayers;
             var ctlMeasure;
             var ctlSidebar;
@@ -150,15 +153,15 @@
                 lyrImagery = L.tileLayer.provider('Esri.WorldImagery',
                                                   {attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community | &copy; <a href="https://www.linkedin.com/in/miguel-imperial-8abaa31a0/">Miguel Imperial</a>'});
 /* VECTOR LAYERS */
-                lyrBikeLanesMManila_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle});
-                lyrBikeLanesMCebu_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_metrocebu.geojson', {style:ba2mcebuStyle}).addTo(mymap);
-                lyrBikeLanesMDavao_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_metrodavao.geojson', {style:ba2mdavaoStyle}).addTo(mymap);
-                lyrBikeLanesMManila_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle}).addTo(mymap);
+                lyrBikeLanesMManila_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle, onEachFeature: ba2_popUp}).addTo(mymap);
+                lyrBikeLanesMCebu_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_metrocebu.geojson', {style:ba2mcebuStyle, onEachFeature: ba2_popUp}).addTo(mymap);
+                lyrBikeLanesMDavao_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_metrodavao.geojson', {style:ba2mdavaoStyle, onEachFeature: ba2_popUp}).addTo(mymap);
                 // lyrBikeLanesSNCR_2021 = L.geoJSON.ajax('data/2021_bikelanes_south_ncr.geojson', {style:sncrStyle}).addTo(mymap);
                 lyrBikeLanesQC = L.geoJSON.ajax('data/qc_bikelanes_ncr.geojson', {style:lguStyle}).addTo(mymap);          
                 lyrBikeLanesTaguig = L.geoJSON.ajax('data/taguig_bikelanes_ncr.geojson', {style:lguStyle}).addTo(mymap);          
                 lyrBikeLanesPasig = L.geoJSON.ajax('data/pasig_bikelanes_ncr.geojson', {style:lguStyle}).addTo(mymap);          
                 lyrUsblBikeLanes = L.geoJSON.ajax('data/usable_bikelanes_30April2021.geojson', {style:usblStyle}).addTo(mymap);
+                lyrBorders = L.geoJSON.ajax('data/gadm36_PHL_2.geojson', {style:borderStyle, onEachFeature: borders_popUp});
 /* BASEMAPS */
                 objBasemaps = {
                     "Carto Positron": lyrCarto,
@@ -174,12 +177,22 @@
                     "Bayanihan II Metro Davao": lyrBikeLanesMDavao_ba2,
                     "Quezon City LGU": lyrBikeLanesQC,
                     "Taguig City LGU": lyrBikeLanesTaguig,
-                    "Pasig City LGU": lyrBikeLanesPasig
+                    "Pasig City LGU": lyrBikeLanesPasig,
+                    "Borders": lyrBorders
                     // "2021 South NCR": lyrBikeLanesSNCR_2021
                 }
 /* LAYER CONTROL */
                 ctlLayers = L.control.layers(objBasemaps, objOverlays).addTo(mymap);
 /* LAYER STYLING */
+                function ba2_popUp(feature, json){
+                    json.bindPopup(feature.properties.name)
+                    json.bindTooltip(feature.properties.name)
+                }
+
+                function borders_popUp(feature, json){
+                    json.bindPopup(feature.properties.NAME_2)
+                    json.bindTooltip(feature.properties.NAME_2)
+                }
                 function ba2ncrStyle(json) {
                     var att = json.properties;
                     switch (att.type) {
@@ -229,6 +242,13 @@
                                     dashArray: "4,4", 
                                     weight: 0.85}
                     }
+                }
+                function borderStyle (json) {
+                    return {
+                        fillColor: '#FFFFFF',
+                        fillOpacity:0,
+                        weight:0.75
+                    };
                 }
             });   
         </script>
