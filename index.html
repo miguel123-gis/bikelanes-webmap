@@ -87,6 +87,7 @@
             var ctlEasybutton;
             var objBasemaps;
             var objOverlays;
+            var ctlRouting;
 /* INITIALIZE MAP */
             $(document).ready(function(){    
                 mymap = L.map('mapdiv', {center:[14.606, 121.026], zoom:11});      
@@ -95,20 +96,28 @@
                     return ""+ll.lat.toFixed(3)+", "+ll.lng.toFixed(3)+"";
                 }
 /* ROUTING */
-                L.Routing.control({routeWhileDragging: true}).addTo(mymap);
-
-                function createButton(label, container) {
-                    var btn = L.DomUtil.create('button', '', container);
-                    btn.setAttribute('type', 'button');
-                    btn.innerHTML = label;
-                    return btn;
-                }
+                ctlRouting = L.Routing.control({
+                    routeWhileDragging: true,
+                    show: true,
+                    language: 'en',
+                    // geocoder: L.Control.Geocoder.nominatim(),
+                    autoRoute: true}).addTo(mymap);
 
                 mymap.on('click', function(e) {
                     var container = L.DomUtil.create('div'),
-                        startBtn = createButton('Start from this location', container),
-                        destBtn = createButton('Go to this location', container);
+                        startBtn = createRoutingButton('Start from this location', container),
+                        destBtn = createRoutingButton('Go to this location', container);
                     
+                    L.DomEvent.on(startBtn, 'click', function () {
+                        ctlRouting.spliceWaypoints(0, 1, e.latlng);
+                        mymap.closePopup();
+                    });
+
+                    L.DomEvent.on(destBtn, 'click', function () {
+                        ctlRouting.spliceWaypoints(ctlRouting.getWaypoints().length - 1, 1, e.latlng);
+                        mymap.closePopup();
+                    });
+
                     L.popup()
                         .setContent(container)
                         .setLatLng(e.latlng)
@@ -269,6 +278,13 @@
                         fillOpacity:0,
                         weight:0.75
                     };
+                }
+
+                function createRoutingButton(label, container) {
+                    var btn = L.DomUtil.create('button', '', container);
+                    btn.setAttribute('type', 'button');
+                    btn.innerHTML = label;
+                    return btn;
                 }
             });   
         </script>
