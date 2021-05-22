@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="src/plugins/Leaflet.PolylineMeasure.css">
         <link rel="stylesheet" href="src/plugins/easy-button.css">
         <link rel="stylesheet" href="src/plugins/L.Control.Sidebar.css">
+        <link rel="stylesheet" href="src/plugins/leaflet-routing-machine.css">
         <script src="src/leaflet.js"></script>
         <script src="src/jquery-3.2.0.min.js"></script>
         <script src="src/plugins/leaflet.ajax.min.js"></script>
@@ -18,7 +19,7 @@
         <script src="src/plugins/easy-button.js"></script>
         <script src="src/plugins/L.Control.Sidebar.js"></script>
         <script src="src/plugins/Tooltip.js"></script>
-
+        <script src="src/plugins/leaflet-routing-machine.min.js"></script>
     </head>
 <!-- TITLE STYLING -->
         <style>
@@ -93,6 +94,26 @@
                     console.log(ll);
                     return ""+ll.lat.toFixed(3)+", "+ll.lng.toFixed(3)+"";
                 }
+/* ROUTING */
+                L.Routing.control({routeWhileDragging: true}).addTo(mymap);
+
+                function createButton(label, container) {
+                    var btn = L.DomUtil.create('button', '', container);
+                    btn.setAttribute('type', 'button');
+                    btn.innerHTML = label;
+                    return btn;
+                }
+
+                mymap.on('click', function(e) {
+                    var container = L.DomUtil.create('div'),
+                        startBtn = createButton('Start from this location', container),
+                        destBtn = createButton('Go to this location', container);
+                    
+                    L.popup()
+                        .setContent(container)
+                        .setLatLng(e.latlng)
+                        .openOn(mymap);
+                });
 /* LOCATE POSITION BUTTON */
                 mymap.on('locationfound', function(e) {
                     console.log(e);
