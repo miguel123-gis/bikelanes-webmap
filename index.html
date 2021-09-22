@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>bikelanes-map</title>
-        <link rel="stylesheet" href="src/leaflet.css">
+        <link rel="stylesheet" href="src/css/leaflet.css">
         <link rel="stylesheet" href="src/css/bootstrap.css">
         <link rel="stylesheet" href="src/plugins/Leaflet.PolylineMeasure.css">
         <link rel="stylesheet" href="src/plugins/easy-button.css">
@@ -22,6 +22,7 @@
         <script src="src/plugins/Tooltip.js"></script>
         <script src="src/plugins/leaflet-routing-machine.min.js"></script>
         <script src="src/plugins/Control.Geocoder.js"></script>
+        <script src="functions.js"></script>
     </head>
 <!-- TITLE STYLING -->
         <style>
@@ -172,10 +173,9 @@
                                                 {attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors | &copy; <a href="https://www.linkedin.com/in/miguel-imperial-8abaa31a0/">Miguel Imperial</a>',
                                                  subdomains: 'abcd',
 	                                             maxZoom: 19});
-                lyrCarto.addTo(mymap);
                 lyrOSM = L.tileLayer.provider('OpenStreetMap.Mapnik', 
                                                 {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | &copy; <a href="https://www.linkedin.com/in/miguel-imperial-8abaa31a0/">Miguel Imperial</a>',
-                                                 maxZoom: 19,});
+                                                 maxZoom: 19,}).addTo(mymap);
                 lyrToner = L.tileLayer.provider('Stamen.TonerLite', 
                                                 {attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | &copy; <a href="https://www.linkedin.com/in/miguel-imperial-8abaa31a0/">Miguel Imperial</a>',
 	                                             subdomains: 'abcd',
@@ -215,79 +215,6 @@
                 }
 /* LAYER CONTROL */
                 ctlLayers = L.control.layers(objBasemaps, objOverlays).addTo(mymap); 
-// FUNCTIONS
-                function ba2_popUp(feature, json){
-                    json.bindPopup(feature.properties.name)
-                    json.bindTooltip(feature.properties.name)
-                }
-
-                function borders_popUp(feature, json){
-                    json.bindTooltip(feature.properties.NAME_2)
-                }
-                function ba2ncrStyle(json) {
-                    var att = json.properties;
-                    switch (att.type) {
-                        case 'Circumferential':
-                            return {color: 'black', weight: 5.5};
-                            break;
-                        case 'Radial':
-                            return {color: 'black', weight: 4.5};
-                            break;
-                        default: 
-                            return {color: 'black', weight: 4};
-                    } 
-                }
-
-                function ba2mcebuStyle(json) {
-                    return {color:'black', weight: 4}
-                }
-
-                function ba2mdavaoStyle(json) {
-                    return {color:'black', weight: 4}
-                }
-
-                function sncrStyle(json) {
-                    return {
-                        color: 'blue',
-                        weight: 4
-                    }};
-
-                function lguStyle(json) {
-                    return {
-                        color: 'green',
-                        weight: 4   
-                    }};
-
-                function usblStyle (json) {
-                    var att = json.properties;
-                    switch (att.Name) {
-                        case 'Usable':
-                            return {color: 'yellow'}
-                            break;
-                        case 'Moderately Usable':
-                            return {color: 'yellow', 
-                                    dashArray: "5,5"};
-                            break;
-                        default:
-                            return {color: 'orange', 
-                                    dashArray: "4,4", 
-                                    weight: 0.85}
-                    }
-                }
-                function borderStyle (json) {
-                    return {
-                        fillColor: '#FFFFFF',
-                        fillOpacity:0,
-                        weight:0.75
-                    };
-                }
-
-                function createRoutingButton(label, container) {
-                    var btn = L.DomUtil.create('button', '', container);
-                    btn.setAttribute('type', 'button');
-                    btn.innerHTML = label;
-                    return btn;
-                }
             });   
         </script>
     </body>
