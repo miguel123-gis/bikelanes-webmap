@@ -172,10 +172,10 @@
                 lyrCarto = L.tileLayer.provider('CartoDB.Positron', 
                                                 {attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors | &copy; <a href="https://www.linkedin.com/in/miguel-imperial-8abaa31a0/">Miguel Imperial</a>',
                                                  subdomains: 'abcd',
-	                                             maxZoom: 19});
+	                                             maxZoom: 19}).addTo(mymap);
                 lyrOSM = L.tileLayer.provider('OpenStreetMap.Mapnik', 
                                                 {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | &copy; <a href="https://www.linkedin.com/in/miguel-imperial-8abaa31a0/">Miguel Imperial</a>',
-                                                 maxZoom: 19,}).addTo(mymap);
+                                                 maxZoom: 19,});
                 lyrToner = L.tileLayer.provider('Stamen.TonerLite', 
                                                 {attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | &copy; <a href="https://www.linkedin.com/in/miguel-imperial-8abaa31a0/">Miguel Imperial</a>',
 	                                             subdomains: 'abcd',
