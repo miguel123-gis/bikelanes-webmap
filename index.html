@@ -98,11 +98,18 @@
             var ctlRouting;
 /* INITIALIZE MAP */
             $(document).ready(function(){    
-                mymap = L.map('mapdiv', {center:[14.606, 121.026], zoom:11});      
+                mymap = L.map('mapdiv', {center:[14.606, 121.026], 
+                                         zoom:11, doubleClickZoom:false, zoomSnap:0.25,  zoomDelta: 0.5});      
                 function LatLngToArrayString(ll) {
                     console.log(ll);
                     return ""+ll.lat.toFixed(3)+", "+ll.lng.toFixed(3)+"";
                 }
+/* SIDEBAR TOGGLE BUTTON */
+                ctlSidebar = L.control.sidebar('side-bar').addTo(mymap); 
+                    // ctlSidebar.show('side-bar')   
+                    ctlEasybutton = L.easyButton('glyphicon-list-alt', function(){
+                    ctlSidebar.toggle(); 
+                    }).addTo(mymap);
 /* ROUTING */
                 ctlRouting = L.Routing.control({
                     routeWhileDragging: true,
@@ -111,7 +118,7 @@
                     geocoder: L.Control.Geocoder.nominatim(),
                     autoRoute: true}).addTo(mymap);
 
-                mymap.on('click', function(e) {
+                mymap.on('dblclick', function(e) {
                     var container = L.DomUtil.create('div'),
                         startBtn = createRoutingButton('Start from this location', container),
                         destBtn = createRoutingButton('Go to this location', container);
@@ -166,29 +173,23 @@
                     $("#mouse-location").html(LatLngToArrayString(e.latlng));
                 });
 /* MEASURE FUNCTION */
-                ctlMeasure = L.control.polylineMeasure().addTo(mymap);
-/* SIDEBAR TOGGLE BUTTON */
-                ctlSidebar = L.control.sidebar('side-bar').addTo(mymap); 
-                // ctlSidebar.show('side-bar')   
-                ctlEasybutton = L.easyButton('glyphicon-list-alt', function(){
-                   ctlSidebar.toggle(); 
-                }).addTo(mymap);
+                ctlMeasure = L.control.polylineMeasure({showClearControl: true, showUnitControl: true, position:'topleft', unit:'metres'}).addTo(mymap);
 /* BASEMAPS */
                 lyrCarto = L.tileLayer.provider('CartoDB.Positron', 
-                                                {attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors | &copy; <a href="https://www.linkedin.com/in/miguel-imperial-8abaa31a0/">Miguel Imperial</a>',
+                                                {attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors | @ <a href="https://miguel123-gis.github.io/website" target="_blank">Miguel Imperial</a>',
                                                  subdomains: 'abcd',
 	                                             maxZoom: 19}).addTo(mymap);
                 lyrOSM = L.tileLayer.provider('OpenStreetMap.Mapnik', 
-                                                {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | &copy; <a href="https://www.linkedin.com/in/miguel-imperial-8abaa31a0/">Miguel Imperial</a>',
+                                                {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | @ <a href="https://miguel123-gis.github.io/website" target="_blank">Miguel Imperial</a>',
                                                  maxZoom: 19,});
                 lyrToner = L.tileLayer.provider('Stamen.TonerLite', 
-                                                {attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | &copy; <a href="https://www.linkedin.com/in/miguel-imperial-8abaa31a0/">Miguel Imperial</a>',
+                                                {attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | @ <a href="https://miguel123-gis.github.io/website" target="_blank">Miguel Imperial</a>',
 	                                             subdomains: 'abcd',
                                                  minZoom: 0,
                                                  maxZoom: 20,
                                                  ext: 'png'});
                 lyrImagery = L.tileLayer.provider('Esri.WorldImagery',
-                                                  {attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community | &copy; <a href="https://www.linkedin.com/in/miguel-imperial-8abaa31a0/">Miguel Imperial</a>'});
+                                                  {attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community | @ <a href="https://miguel123-gis.github.io/website" target="_blank">Miguel Imperial</a>'});
 /* VECTOR LAYERS */
                 lyrBikeLanesMManila_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle, onEachFeature: ba2_popUp}).addTo(mymap);
                 lyrBikeLanesMCebu_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_metrocebu.geojson', {style:ba2mcebuStyle, onEachFeature: ba2_popUp}).addTo(mymap);
