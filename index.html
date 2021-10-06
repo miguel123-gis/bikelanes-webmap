@@ -176,20 +176,20 @@
                 ctlMeasure = L.control.polylineMeasure({showClearControl: true, showUnitControl: true, position:'topleft', unit:'metres'}).addTo(mymap);
 /* BASEMAPS */
                 lyrCarto = L.tileLayer.provider('CartoDB.Positron', 
-                                                {attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors | @ <a href="https://miguel123-gis.github.io/website" target="_blank">Miguel Imperial</a> <a href="https://www.linkedin.com/in/martin-suarez/" target="_blank">Martin Suarez</a>' ,
+                                                {attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors | @ <a href="https://miguel123-gis.github.io/website" target="_blank">Miguel Imperial</a>, <a href="https://www.linkedin.com/in/martin-suarez/" target="_blank">Martin Suarez</a>' ,
                                                  subdomains: 'abcd',
 	                                             maxZoom: 19}).addTo(mymap);
                 lyrOSM = L.tileLayer.provider('OpenStreetMap.Mapnik', 
-                                                {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | @ <a href="https://miguel123-gis.github.io/website" target="_blank">Miguel Imperial</a> <a href="https://www.linkedin.com/in/martin-suarez/" target="_blank">Martin Suarez</a>',
+                                                {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | @ <a href="https://miguel123-gis.github.io/website" target="_blank">Miguel Imperial</a>, <a href="https://www.linkedin.com/in/martin-suarez/" target="_blank">Martin Suarez</a>',
                                                  maxZoom: 19,});
                 lyrToner = L.tileLayer.provider('Stamen.TonerLite', 
-                                                {attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | @ <a href="https://miguel123-gis.github.io/website" target="_blank">Miguel Imperial</a> <a href="https://www.linkedin.com/in/martin-suarez/" target="_blank">Martin Suarez</a>' ,
+                                                {attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | @ <a href="https://miguel123-gis.github.io/website" target="_blank">Miguel Imperial</a>, <a href="https://www.linkedin.com/in/martin-suarez/" target="_blank">Martin Suarez</a>' ,
 	                                             subdomains: 'abcd',
                                                  minZoom: 0,
                                                  maxZoom: 20,
                                                  ext: 'png'});
                 lyrImagery = L.tileLayer.provider('Esri.WorldImagery',
-                                                  {attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community | @ <a href="https://miguel123-gis.github.io/website" target="_blank">Miguel Imperial</a> <a href="https://www.linkedin.com/in/martin-suarez/" target="_blank">Martin Suarez</a>'});
+                                                  {attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community | @ <a href="https://miguel123-gis.github.io/website" target="_blank">Miguel Imperial</a>, <a href="https://www.linkedin.com/in/martin-suarez/" target="_blank">Martin Suarez</a>'});
 /* VECTOR LAYERS */
                 lyrBikeLanesMManila_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_ncr.geojson', {style:ba2ncrStyle, onEachFeature: ba2_popUp}).addTo(mymap);
                 lyrBikeLanesMCebu_ba2 = L.geoJSON.ajax('data/ba2_bikelanes_metrocebu.geojson', {style:ba2mcebuStyle, onEachFeature: ba2_popUp}).addTo(mymap);
