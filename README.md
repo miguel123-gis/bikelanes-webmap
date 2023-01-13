@@ -1,5 +1,5 @@
 ## Link to live map
-https://miguel123-gis.github.io/bikelanes-map/
+https://miguel123-gis.github.io/bikelanes-webmap/
 
 ### Sidebar and layer selection with bike lanes in Metro Manila, PH
 ![image](img/pic1.png)
